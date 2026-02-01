@@ -3,19 +3,34 @@ package http
 import (
 	"net/http"
 
-	"distributed-url-shortener/internal/service"
+	"distributed-url-shortener/internal/http/middleware"
+
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
-func NewRouter() http.Handler {
+func NewRouter(
+	svc Shortener,
+	rl *middleware.RateLimiter,
+) http.Handler {
+
 	mux := http.NewServeMux()
 
-	shortenerSvc := service.NewShortenerService()
-
 	mux.HandleFunc("/health", HealthHandler)
-	mux.HandleFunc("/shorten", ShortenHandler(shortenerSvc))
+	mux.Handle("/metrics", promhttp.Handler())
 
-	// ⚠️ MUST BE LAST
-	mux.HandleFunc("/", RedirectHandler(shortenerSvc))
+	mux.Handle(
+		"/shorten",
+		middleware.Metrics(
+			rl.Middleware(http.HandlerFunc(ShortenHandler(svc))),
+		),
+	)
+
+	mux.Handle(
+		"/",
+		middleware.Metrics(
+			http.HandlerFunc(RedirectHandler(svc)),
+		),
+	)
 
 	return mux
 }

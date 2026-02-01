@@ -1,55 +1,57 @@
 package service
 
 import (
-	"crypto/rand"
-	"math/big"
-	"sync"
+	"context"
+	"time"
+
+	"distributed-url-shortener/internal/cache"
+	"distributed-url-shortener/internal/metrics"
+
+	"github.com/redis/go-redis/v9"
 )
 
-type ShortenerService interface {
-	Shorten(url string) string
-	Resolve(code string) (string, bool)
+type ShortenerService struct {
+	rdb   *redis.Client
+	cache *cache.LRUCache
 }
 
-type shortenerService struct {
-	store map[string]string
-	mu    sync.RWMutex
+func NewShortenerService(rdb *redis.Client, cache *cache.LRUCache) *ShortenerService {
+	return &ShortenerService{rdb: rdb, cache: cache}
 }
 
-func NewShortenerService() ShortenerService {
-	return &shortenerService{
-		store: make(map[string]string),
-	}
-}
-
-const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-const codeLength = 6
-
-func (s *shortenerService) Shorten(url string) string {
-	code := generateCode()
-
-	s.mu.Lock()
-	s.store[code] = url
-	s.mu.Unlock()
-
-	return code
-}
-
-func (s *shortenerService) Resolve(code string) (string, bool) {
-	s.mu.RLock()
-	url, ok := s.store[code]
-	s.mu.RUnlock()
-
-	return url, ok
-}
-
-func generateCode() string {
-	code := make([]byte, codeLength)
-
-	for i := range code {
-		n, _ := rand.Int(rand.Reader, big.NewInt(int64(len(charset))))
-		code[i] = charset[n.Int64()]
+func (s *ShortenerService) Shorten(url string) (string, error) {
+	code, err := generateCode(7)
+	if err != nil {
+		return "", err
 	}
 
-	return string(code)
+	ctx := context.Background()
+	ttl := time.Hour
+
+	if err := s.rdb.Set(ctx, code, url, ttl).Err(); err != nil {
+		metrics.RedisErrors.Inc()
+		return "", ErrServiceUnavailable
+	}
+
+	s.cache.Set(code, url, ttl)
+	return code, nil
+}
+
+func (s *ShortenerService) Resolve(code string) (string, error) {
+	if url, ok := s.cache.Get(code); ok {
+		return url, nil
+	}
+
+	ctx := context.Background()
+	url, err := s.rdb.Get(ctx, code).Result()
+	if err == redis.Nil {
+		return "", ErrNotFound
+	}
+	if err != nil {
+		metrics.RedisErrors.Inc()
+		return "", ErrServiceUnavailable
+	}
+
+	s.cache.Set(code, url, time.Hour)
+	return url, nil
 }

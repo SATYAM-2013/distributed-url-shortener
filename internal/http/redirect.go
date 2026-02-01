@@ -6,18 +6,19 @@ import (
 	"distributed-url-shortener/internal/service"
 )
 
-func RedirectHandler(svc service.ShortenerService) http.HandlerFunc {
+func RedirectHandler(svc Shortener) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+		code := r.URL.Path[1:]
 
-		code := r.URL.Path[1:] // remove leading "/"
-		if code == "" {
+		url, err := svc.Resolve(code)
+
+		if err == service.ErrNotFound {
 			http.NotFound(w, r)
 			return
 		}
 
-		url, ok := svc.Resolve(code)
-		if !ok {
-			http.NotFound(w, r)
+		if err == service.ErrServiceUnavailable {
+			http.Error(w, "Service temporarily unavailable", http.StatusServiceUnavailable)
 			return
 		}
 
