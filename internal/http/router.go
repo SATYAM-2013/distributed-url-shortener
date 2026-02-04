@@ -24,14 +24,9 @@ func NewRouter(
 	mux := http.NewServeMux()
 
 	// ----------------------
-	// Root (API info)
+	// API info (NOT "/")
 	// ----------------------
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if r.URL.Path != "/" {
-			http.NotFound(w, r)
-			return
-		}
-
+	mux.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
 		_ = json.NewEncoder(w).Encode(RootResponse{
 			Service: "distributed-url-shortener",
@@ -68,7 +63,7 @@ func NewRouter(
 	)
 
 	// ----------------------
-	// Redirect short URL
+	// Redirect (ONLY "/" handler)
 	// ----------------------
 	mux.Handle(
 		"/",
