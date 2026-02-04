@@ -6,11 +6,14 @@ import (
 	"github.com/redis/go-redis/v9"
 )
 
-func NewRedisClient(addr string) *redis.Client {
-	rdb := redis.NewClient(&redis.Options{
-		Addr: addr,
-	})
+func NewRedisClient(redisURL string) *redis.Client {
+	opt, err := redis.ParseURL(redisURL)
+	if err != nil {
+		log.Fatalf("Failed to parse REDIS_ADDR: %v", err)
+	}
 
-	log.Printf("✅ Connected to Redis at %s\n", addr)
+	rdb := redis.NewClient(opt)
+
+	log.Println("Connected to Redis via URL")
 	return rdb
 }
