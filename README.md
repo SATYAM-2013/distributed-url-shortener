@@ -4,7 +4,7 @@
     <strong>Production-Grade Distributed URL Shortening Service Built in Go</strong>
   </p>
   <p align="center">
-    Designed & Developed by <strong>Satyam</strong>
+    Designed & Developed by <strong>SATYAM SINHA</strong>
   </p>
 </p>
 
