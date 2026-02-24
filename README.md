@@ -110,44 +110,62 @@ Redis
 
 ---
 
-## 🐳 Running with Docker (Recommended)
+🐳 Running with Docker (Recommended)
 
 Start the backend and Redis automatically:
+
 docker compose up --build
-Service will be available at:
+
+The API will be available at:
 
 http://localhost:8080
+
+Redis runs inside the Docker network and connects automatically to the backend service.
+
 🖥 Running Locally (Manual Setup)
+
+If you prefer running services manually without Docker Compose:
+
 1️⃣ Start Redis
 docker run -d -p 6379:6379 redis
 2️⃣ Start Backend
 go run cmd/api/main.go
+
+Backend will start on:
+
+http://localhost:8080
 🎨 Running Frontend (Streamlit UI)
+
+Start the frontend:
+
 streamlit run app.py
 
-Open:
+Open in your browser:
 
 http://localhost:8501
-⚙ Environment Configuration
+⚙ Environment Variables
+
+The service supports the following environment variables:
+
 Variable	Description	Default
 PORT	API server port	8080
 REDIS_URL	Redis connection string	127.0.0.1:6379
 CACHE_SIZE	LRU cache size	100000
 🔒 Rate Limiting Strategy
 
-Sliding window algorithm
+The system implements a Redis-backed sliding window rate limiter with:
 
 Per API key enforcement
 
-Redis-backed counters
+Configurable request limits
 
-Configurable limits
+Distributed-safe implementation
 
-Distributed-safe
+Production-ready behavior
 
 ☁ Cloud Deployment Ready
 
-This service is designed to deploy seamlessly on:
+This service is fully containerized and can be deployed to:
 
 Render
 
@@ -155,17 +173,17 @@ Fly.io
 
 AWS ECS / EC2
 
-GCP
+Google Cloud Platform
 
 Azure
 
 Kubernetes clusters
 
-Key properties enabling this:
+Key properties enabling cloud deployment:
 
 Stateless instances
 
-Environment-based config
+Environment-based configuration
 
 Containerized runtime
 
@@ -173,7 +191,7 @@ No local disk dependency
 
 🧠 Engineering Highlights
 
-This project demonstrates practical backend engineering concepts:
+This project demonstrates:
 
 Distributed systems design
 
@@ -187,7 +205,7 @@ Docker multi-stage builds
 
 Production container hardening
 
-Clean architecture patterns
+Clean layered architecture
 
 Observability integration
 
@@ -210,17 +228,5 @@ Load testing benchmarks
 📄 License
 
 MIT License
-
-⭐ Support
-
-If you found this project useful:
-
-Star the repository
-
-Fork it
-
-Share feedback
-
-Connect with me
 
 <p align="center"> Built with engineering discipline and production mindset. </p> 
