@@ -15,7 +15,7 @@ This system demonstrates distributed architecture patterns used in large-scale p
 
 ---
 
-## 🏗 System Architecture
+## System Architecture
 
 ```
                 ┌─────────────────────┐
