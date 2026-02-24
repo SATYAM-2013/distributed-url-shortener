@@ -8,9 +8,6 @@
     Designed for Scalability • Fault Tolerance • Cloud Deployment
   </p>
 </p>
----
-
----
 
 A production-grade, horizontally scalable URL shortening service built in **Go**, designed using real-world backend engineering principles.
 
