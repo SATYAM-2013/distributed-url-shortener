@@ -273,3 +273,9 @@ Potential enhancements for real-world deployment:
 ##  License
 
 MIT License
+
+---
+##  Connect With Me
+
+LinkedIn: https://www.linkedin.com/in/satyam-sinha-b1646435b/
+GitHub: https://github.com/satyam-2013
