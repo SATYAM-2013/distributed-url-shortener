@@ -1,14 +1,24 @@
 services:
   redis:
     image: redis:7
+    container_name: url-shortener-redis
     ports:
       - "6379:6379"
+    networks:
+      - urlnet
 
-  api:
+  backend:
     build: .
+    container_name: url-shortener-api
     ports:
       - "8080:8080"
     depends_on:
       - redis
     environment:
-      REDIS_URL: redis:6379
+      - REDIS_ADDR=redis:6379
+    networks:
+      - urlnet
+
+networks:
+  urlnet:
+    driver: bridge

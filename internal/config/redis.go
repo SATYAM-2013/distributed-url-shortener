@@ -1,30 +1,52 @@
 package config
 
 import (
+	"context"
 	"log"
 	"os"
-	"strings"
+	"time"
 
 	"github.com/redis/go-redis/v9"
 )
 
 func NewRedisClient() *redis.Client {
-	addr := os.Getenv("REDIS_URL")
-	if addr == "" {
-		addr = "127.0.0.1:6379"
-	}
 
-	// If full URL (Upstash)
-	if strings.HasPrefix(addr, "redis://") || strings.HasPrefix(addr, "rediss://") {
-		opt, err := redis.ParseURL(addr)
+	// Priority 1: REDIS_URL (Cloud providers like Upstash)
+	if redisURL := os.Getenv("REDIS_URL"); redisURL != "" {
+		opt, err := redis.ParseURL(redisURL)
 		if err != nil {
-			log.Fatalf("Failed to parse REDIS_URL: %v", err)
+			log.Fatalf("❌ Failed to parse REDIS_URL: %v", err)
 		}
-		return redis.NewClient(opt)
+
+		client := redis.NewClient(opt)
+
+		testConnection(client)
+		log.Println("✅ Connected to Redis via REDIS_URL")
+
+		return client
 	}
 
-	// Local redis
-	return redis.NewClient(&redis.Options{
-		Addr: addr,
+	// Priority 2: REDIS_ADDR (Docker/local network)
+	redisAddr := os.Getenv("REDIS_ADDR")
+	if redisAddr == "" {
+		redisAddr = "127.0.0.1:6379"
+	}
+
+	client := redis.NewClient(&redis.Options{
+		Addr: redisAddr,
 	})
+
+	testConnection(client)
+	log.Printf("✅ Connected to Redis at %s\n", redisAddr)
+
+	return client
+}
+
+func testConnection(client *redis.Client) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	if err := client.Ping(ctx).Err(); err != nil {
+		log.Fatalf("❌ Redis connection failed: %v", err)
+	}
 }
