@@ -1,6 +1,6 @@
 <p align="center">
   <h1 align="center">🔗 Distributed URL Shortener</h1>
-  <h3 align="center">Designed & Engineered by Satyam</h3>
+  <h3 align="center">Designed & Engineered by SATYAM SINHA</h3>
   <p align="center">
     Production-Grade Distributed URL Shortening Service Built in Go
   </p>
@@ -8,14 +8,6 @@
     Designed for Scalability • Fault Tolerance • Cloud Deployment
   </p>
 </p>
-
-<p align="center">
-  <img src="https://img.shields.io/badge/Go-1.22+-00ADD8?style=for-the-badge&logo=go"/>
-  <img src="https://img.shields.io/badge/Redis-Distributed-DC382D?style=for-the-badge&logo=redis"/>
-  <img src="https://img.shields.io/badge/Docker-Containerized-2496ED?style=for-the-badge&logo=docker"/>
-  <img src="https://img.shields.io/badge/Architecture-Stateless-black?style=for-the-badge"/>
-</p>
-
 ---
 
 ---
