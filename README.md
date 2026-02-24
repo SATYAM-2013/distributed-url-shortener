@@ -113,8 +113,6 @@ Redis
 ## 🐳 Running with Docker (Recommended)
 
 Start the backend and Redis automatically:
-
-```bash
 docker compose up --build
 Service will be available at:
 
@@ -225,4 +223,4 @@ Share feedback
 
 Connect with me
 
-<p align="center"> Built with engineering discipline and production mindset. </p> ```
+<p align="center"> Built with engineering discipline and production mindset. </p> 
