@@ -1,281 +1,228 @@
 <p align="center">
-  <h1 align="center">🔗 Distributed URL Shortener</h1>
-  <h3 align="center">Designed & Engineered by SATYAM SINHA</h3>
+  <h1 align="center">Distributed URL Shortener</h1>
   <p align="center">
-    Production-Grade Distributed URL Shortening Service Built in Go
+    <strong>Production-Grade Distributed URL Shortening Service Built in Go</strong>
   </p>
   <p align="center">
-    Designed for Scalability • Fault Tolerance • Cloud Deployment
+    Designed & Developed by <strong>Satyam</strong>
   </p>
 </p>
 
-A production-grade, horizontally scalable URL shortening service built in **Go**, designed using real-world backend engineering principles.
+---
 
-This system demonstrates distributed architecture patterns used in large-scale production services, including caching strategies, rate limiting, stateless APIs, and containerized cloud deployment.
+## 🚀 Overview
+
+Distributed URL Shortener is a production-ready backend system built using **Go**, designed with real-world distributed systems principles.
+
+The service is:
+
+- Stateless
+- Horizontally scalable
+- Redis-backed
+- Dockerized
+- Rate-limited
+- Cache-optimized
+- Cloud-deployment ready
+
+This project demonstrates how large-scale backend systems are architected, deployed, and operated in production environments.
 
 ---
 
-##  System Architecture
+## 🛠 Tech Stack
 
-```
-                ┌─────────────────────┐
-                │    Streamlit UI     │
-                └──────────┬──────────┘
-                           │
-                           ▼
-                ┌─────────────────────┐
-                │  Go HTTP API Layer  │
-                │  (Stateless)        │
-                └──────────┬──────────┘
-                           │
-        ┌──────────────────┴──────────────────┐
-        ▼                                     ▼
-┌─────────────────┐                   ┌─────────────────┐
-│   LRU Cache     │                   │     Redis       │
-│ (Hot URL cache) │                   │  Source of Truth│
-└─────────────────┘                   └─────────────────┘
-                                              │
-                                              ▼
-                                      Rate Limiter
-                                (Distributed via Redis)
-```
+| Layer | Technology |
+|-------|------------|
+| Language | Go (Golang) |
+| Storage | Redis |
+| Caching | In-memory LRU Cache |
+| Rate Limiting | Redis-based sliding window |
+| Containerization | Docker (Multi-stage build) |
+| Production Image | Distroless |
+| Frontend | Streamlit |
+| Observability | Prometheus Metrics |
 
 ---
 
-##  Core Features
+## 📸 Application Preview
 
-### ✅ Stateless REST API
-
-* Designed for horizontal scaling
-* Instances can be deployed behind a load balancer
-* No in-memory state dependency
-
-### ✅ Redis-backed Persistence
-
-* URL mappings stored in Redis
-* Ensures durability and distributed consistency
-
-### ✅ Distributed Rate Limiting
-
-* Redis-backed sliding window algorithm
-* Prevents abuse per API key
-* Cloud-safe across multiple instances
-
-### ✅ In-Memory LRU Cache
-
-* Reduces Redis read pressure
-* Optimizes hot URL access
-* Improves latency under load
-
-### ✅ Dockerized (Production Ready)
-
-* Multi-stage builds
-* Distroless runtime image
-* Minimal attack surface
-* Portable across environments
-
-### ✅ Environment-Based Configuration
-
-* No hardcoded secrets
-* Cloud-native configuration pattern
-* Ready for Render / Fly.io / AWS / GCP
-
-### ✅ Observability
-
-* Prometheus metrics endpoint
-* Health checks
-* Structured logging
+<p align="center">
+  <img src="screenshots/home.png" width="45%"/>
+  <img src="screenshots/shortened.png" width="45%"/>
+</p>
 
 ---
 
-##  Design Principles
+## ✨ Core Features
 
-This project follows industry-standard backend architecture principles:
+### 🔹 Stateless REST API
+Designed for horizontal scaling behind a load balancer.
 
-* Separation of concerns (API / Service / Storage layers)
-* Stateless service design
-* Cache-aside strategy
-* Distributed rate limiting
-* Container-first deployment
-* Configuration via environment variables
+### 🔹 Redis-backed Persistence
+Redis acts as the source of truth for URL mappings.
 
-These patterns mirror those used in high-scale systems at companies like Google, Meta, Amazon, and Netflix.
+### 🔹 Distributed Rate Limiting
+Prevents abuse using Redis-based sliding window counters.
 
----
+### 🔹 In-Memory LRU Cache
+Optimizes hot URL lookups for low-latency responses.
 
-##  API Endpoints
+### 🔹 Production-Ready Containerization
+- Multi-stage Docker builds
+- Distroless runtime image
+- Environment-driven configuration
 
-### Create Short URL
-
-```http
-POST /shorten
-```
-
-Request:
-
-```json
-{
-  "url": "https://example.com"
-}
-```
-
-Response:
-
-```json
-{
-  "short_url": "http://localhost:8080/abc123"
-}
-```
+### 🔹 Observability
+- `/metrics` endpoint for Prometheus
+- `/health` endpoint for health checks
 
 ---
 
-### Redirect
+## 🏗 System Architecture
+Client (Streamlit UI / API Consumer)
+↓
+Go HTTP API (Stateless)
+↓
+Service Layer (Logic)
+↓
+LRU Cache
+↓
+Redis
 
-```http
-GET /{code}
-```
+### Architectural Principles
 
-Redirects to the original URL.
-
----
-
-### Health Check
-
-```http
-GET /health
-```
-
----
-
-### Metrics
-
-```http
-GET /metrics
-```
-
-Prometheus-compatible metrics.
+- Separation of concerns
+- Clean layered design
+- Stateless compute layer
+- Distributed rate limiting
+- Cloud-native configuration
 
 ---
 
-##  Rate Limiting
+## 📡 API Endpoints
 
-* Implemented using Redis sliding window counters
-* Configurable via environment variables
-* Enforced per API key
-* Distributed-safe across multiple instances
-
----
-
-##  Environment Variables
-
-| Variable            | Description            | Default        |
-| ------------------- | ---------------------- | -------------- |
-| PORT                | HTTP server port       | 8080           |
-| REDIS_ADDR          | Redis address          | localhost:6379 |
-| API_KEY             | API authentication key | required       |
-| ENABLE_RATE_LIMIT   | Enable rate limiting   | true           |
-| RATE_LIMIT          | Requests per window    | 100            |
-| RATE_WINDOW_SECONDS | Time window            | 60             |
-| CACHE_SIZE          | LRU cache size         | 100000         |
+| Method | Endpoint | Description |
+|--------|----------|------------|
+| POST | `/shorten` | Create a short URL |
+| GET | `/{code}` | Redirect to original URL |
+| GET | `/health` | Health check |
+| GET | `/metrics` | Prometheus metrics |
+| GET | `/api` | Service metadata |
 
 ---
 
-##  Docker Setup
+## 🐳 Running with Docker (Recommended)
 
-### Start Redis
+Start the backend and Redis automatically:
 
 ```bash
+docker compose up --build
+Service will be available at:
+
+http://localhost:8080
+🖥 Running Locally (Manual Setup)
+1️⃣ Start Redis
 docker run -d -p 6379:6379 redis
-```
-
-### Run Application
-
-```bash
-docker build -t url-shortener .
-docker run -p 8080:8080 url-shortener
-```
-
----
-
-##  Local Development
-
-### 1️⃣ Start Redis
-
-```bash
-docker run -d -p 6379:6379 redis
-```
-
-### 2️⃣ Run Backend
-
-```bash
+2️⃣ Start Backend
 go run cmd/api/main.go
-```
-
-### 3️⃣ Run Frontend (Streamlit)
-
-```bash
+🎨 Running Frontend (Streamlit UI)
 streamlit run app.py
-```
 
----
+Open:
 
-##  Deployment
+http://localhost:8501
+⚙ Environment Configuration
+Variable	Description	Default
+PORT	API server port	8080
+REDIS_URL	Redis connection string	127.0.0.1:6379
+CACHE_SIZE	LRU cache size	100000
+🔒 Rate Limiting Strategy
 
-The service is fully containerized and can be deployed to:
+Sliding window algorithm
 
-* Render
-* Fly.io
-* AWS ECS
-* GCP Cloud Run
-* Kubernetes clusters
+Per API key enforcement
 
-Because the application is stateless, it supports horizontal scaling behind a load balancer without session affinity.
+Redis-backed counters
 
----
+Configurable limits
 
-##  Scalability Strategy
+Distributed-safe
 
-* Stateless instances
-* Redis as centralized storage
-* Cache layer reduces database load
-* Rate limiting distributed via Redis
-* Docker enables portable scaling
+☁ Cloud Deployment Ready
 
-Under load, multiple API instances can operate concurrently with shared Redis coordination.
+This service is designed to deploy seamlessly on:
 
----
+Render
 
-##  Production Considerations
+Fly.io
 
-Potential enhancements for real-world deployment:
+AWS ECS / EC2
 
-* Redis clustering
-* URL expiration support
-* Click analytics
-* Persistent storage (RDB/AOF)
-* Custom domains
-* Authentication system
-* OpenTelemetry tracing
-* CI/CD pipeline integration
+GCP
 
----
+Azure
 
-##  Tech Stack
+Kubernetes clusters
 
-* **Go**
-* **Redis**
-* **Docker**
-* **Streamlit (Frontend UI)**
-* **Prometheus (Metrics)**
+Key properties enabling this:
 
----
+Stateless instances
 
-##  License
+Environment-based config
+
+Containerized runtime
+
+No local disk dependency
+
+🧠 Engineering Highlights
+
+This project demonstrates practical backend engineering concepts:
+
+Distributed systems design
+
+Caching strategies
+
+Horizontal scalability
+
+Rate limiting implementation
+
+Docker multi-stage builds
+
+Production container hardening
+
+Clean architecture patterns
+
+Observability integration
+
+📈 Potential Enhancements
+
+Custom domains
+
+URL expiration
+
+Click analytics dashboard
+
+Authentication layer
+
+Kubernetes deployment
+
+CI/CD automation
+
+Load testing benchmarks
+
+📄 License
 
 MIT License
 
----
-##  Connect With Me
+⭐ Support
 
-LinkedIn: https://www.linkedin.com/in/satyam-sinha-b1646435b/
-GitHub: https://github.com/satyam-2013
+If you found this project useful:
+
+Star the repository
+
+Fork it
+
+Share feedback
+
+Connect with me
+
+<p align="center"> Built with engineering discipline and production mindset. </p> ```
