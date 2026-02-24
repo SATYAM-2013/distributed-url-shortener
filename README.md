@@ -15,7 +15,7 @@ This system demonstrates distributed architecture patterns used in large-scale p
 
 ---
 
-## System Architecture
+##  System Architecture
 
 ```
                 ┌─────────────────────┐
@@ -42,7 +42,7 @@ This system demonstrates distributed architecture patterns used in large-scale p
 
 ---
 
-## 🚀 Core Features
+##  Core Features
 
 ### ✅ Stateless REST API
 
@@ -88,7 +88,7 @@ This system demonstrates distributed architecture patterns used in large-scale p
 
 ---
 
-## 🧠 Design Principles
+##  Design Principles
 
 This project follows industry-standard backend architecture principles:
 
@@ -103,7 +103,7 @@ These patterns mirror those used in high-scale systems at companies like Google,
 
 ---
 
-## 📡 API Endpoints
+##  API Endpoints
 
 ### Create Short URL
 
@@ -157,7 +157,7 @@ Prometheus-compatible metrics.
 
 ---
 
-## 🔒 Rate Limiting
+##  Rate Limiting
 
 * Implemented using Redis sliding window counters
 * Configurable via environment variables
@@ -166,7 +166,7 @@ Prometheus-compatible metrics.
 
 ---
 
-## ⚙️ Environment Variables
+##  Environment Variables
 
 | Variable            | Description            | Default        |
 | ------------------- | ---------------------- | -------------- |
@@ -180,7 +180,7 @@ Prometheus-compatible metrics.
 
 ---
 
-## 🐳 Docker Setup
+##  Docker Setup
 
 ### Start Redis
 
@@ -197,7 +197,7 @@ docker run -p 8080:8080 url-shortener
 
 ---
 
-## 🖥 Local Development
+##  Local Development
 
 ### 1️⃣ Start Redis
 
@@ -219,7 +219,7 @@ streamlit run app.py
 
 ---
 
-## ☁️ Deployment
+##  Deployment
 
 The service is fully containerized and can be deployed to:
 
@@ -233,7 +233,7 @@ Because the application is stateless, it supports horizontal scaling behind a lo
 
 ---
 
-## 📊 Scalability Strategy
+##  Scalability Strategy
 
 * Stateless instances
 * Redis as centralized storage
@@ -245,7 +245,7 @@ Under load, multiple API instances can operate concurrently with shared Redis co
 
 ---
 
-## 🧪 Production Considerations
+##  Production Considerations
 
 Potential enhancements for real-world deployment:
 
@@ -260,7 +260,7 @@ Potential enhancements for real-world deployment:
 
 ---
 
-## 🛠 Tech Stack
+##  Tech Stack
 
 * **Go**
 * **Redis**
@@ -270,6 +270,6 @@ Potential enhancements for real-world deployment:
 
 ---
 
-## 📜 License
+##  License
 
 MIT License
