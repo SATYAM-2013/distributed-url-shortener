@@ -18,44 +18,86 @@ import (
 func main() {
 	log.Println("🚀 Distributed URL Shortener starting...")
 
-	// ===== CONFIG =====
-	port := getEnv("PORT", "8080")
-	cacheSize := getEnvInt("CACHE_SIZE", 100_000)
-	redisAddr := getEnv("REDIS_ADDR", "127.0.0.1:6379")
+	// =============================
+	// CONFIG
+	// =============================
 
-	// ===== METRICS =====
+	port := getEnv("PORT", "8080")
+	cacheSize := getEnvInt("CACHE_SIZE", 100000)
+
+	// Rate limiting config
+	enableRateLimit := getEnv("ENABLE_RATE_LIMIT", "true") == "true"
+	rateLimit := getEnvInt("RATE_LIMIT", 1000)
+	rateWindowSeconds := getEnvInt("RATE_WINDOW_SECONDS", 60)
+
+	// =============================
+	// METRICS
+	// =============================
+
 	metrics.Register()
 
-	// ===== REDIS =====
-	redisClient := config.NewRedisClient(redisAddr)
+	// =============================
+	// REDIS
+	// =============================
 
-	// ===== CACHE =====
+	redisClient := config.NewRedisClient()
+
+	// =============================
+	// CACHE
+	// =============================
+
 	lruCache, err := cache.NewLRUCache(cacheSize)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("❌ Failed to initialize cache:", err)
 	}
 
-	// ===== SERVICE =====
+	// =============================
+	// SERVICE
+	// =============================
+
 	shortener := service.NewShortenerService(redisClient, lruCache)
 
-	// ===== RATE LIMITER =====
-	rateLimiter := middleware.NewRateLimiter(
-		redisClient,
-		100,
-		time.Minute,
-	)
+	// =============================
+	// RATE LIMITER (Optional)
+	// =============================
 
-	// ===== ROUTER =====
-	handler := httpserver.NewRouter(shortener, rateLimiter)
+	var handler http.Handler
+
+	if enableRateLimit {
+		log.Println("🛡 Rate limiter ENABLED")
+		rateLimiter := middleware.NewRateLimiter(
+			redisClient,
+			rateLimit,
+			time.Duration(rateWindowSeconds)*time.Second,
+		)
+		handler = httpserver.NewRouter(shortener, rateLimiter)
+	} else {
+		log.Println("⚠️ Rate limiter DISABLED (dev mode)")
+		handler = httpserver.NewRouter(shortener, nil)
+	}
+
+	// =============================
+	// SERVER
+	// =============================
 
 	server := &http.Server{
-		Addr:    ":" + port,
-		Handler: handler,
+		Addr:         ":" + port,
+		Handler:      handler,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+		IdleTimeout:  30 * time.Second,
 	}
 
 	log.Println("✅ HTTP server listening on :" + port)
-	log.Fatal(server.ListenAndServe())
+
+	if err := server.ListenAndServe(); err != nil {
+		log.Fatal("❌ Server failed:", err)
+	}
 }
+
+// =============================
+// Helpers
+// =============================
 
 func getEnv(key, fallback string) string {
 	if v := os.Getenv(key); v != "" {

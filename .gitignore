@@ -12,7 +12,7 @@
 *.out
 
 # =========================
-# Coverage & test artifacts
+# Coverage & profiling
 # =========================
 coverage.*
 *.coverprofile
@@ -30,9 +30,21 @@ go.work.sum
 vendor/
 
 # =========================
+# Python (Frontend - Streamlit)
+# =========================
+.venv/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# =========================
 # Environment variables
 # =========================
 .env
+.env.*
+!.env.example
 
 # =========================
 # IDE / Editor
@@ -51,3 +63,4 @@ Thumbs.db
 # Docker
 # =========================
 *.log
+docker-compose.override.yml

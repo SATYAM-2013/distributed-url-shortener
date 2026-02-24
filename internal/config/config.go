@@ -16,7 +16,6 @@ type Config struct {
 func Load() *Config {
 	return &Config{
 		Port:       getEnv("PORT", "8080"),
-		RedisAddr:  getEnv("REDIS_ADDR", "127.0.0.1:6379"),
 		CacheSize:  getEnvInt("CACHE_SIZE", 100000),
 		RateLimit:  getEnvInt("RATE_LIMIT", 10),
 		RateWindow: getEnvInt("RATE_WINDOW", 60),
