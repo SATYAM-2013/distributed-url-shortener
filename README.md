@@ -4,13 +4,7 @@
 
 **A production-grade, horizontally scalable URL shortening service built in Go.**
 
-[![Go](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go&logoColor=white)](https://golang.org/)
-[![Redis](https://img.shields.io/badge/Redis-7.0-DC382D?style=flat&logo=redis&logoColor=white)](https://redis.io/)
-[![Docker](https://img.shields.io/badge/Docker-Enabled-2496ED?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Prometheus](https://img.shields.io/badge/Prometheus-Metrics-E6522C?style=flat&logo=prometheus&logoColor=white)](https://prometheus.io/)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-
-[Overview](#-overview) · [Architecture](#-architecture) · [Features](#-features) · [Quick Start](#-quick-start) · [API Reference](#-api-reference) · [Configuration](#-configuration) · [Deployment](#-cloud-deployment) · [Roadmap](#-roadmap)
+[Overview](#-overview) · [Architecture](#-architecture) · [Features](#-features) · [Quick Start](#-quick-start) · [API Reference](#-api-reference) · [Configuration](#-configuration) · [Deployment](#-cloud-deployment)
 
 </div>
 
@@ -319,19 +313,6 @@ This project showcases practical knowledge of:
 
 ---
 
-## 🗺 Roadmap
-
-- [ ] Custom short codes / vanity URLs
-- [ ] URL expiration (TTL support)
-- [ ] Click analytics dashboard
-- [ ] JWT-based authentication
-- [ ] Kubernetes Helm chart
-- [ ] GitHub Actions CI/CD pipeline
-- [ ] Load testing benchmarks (k6 / wrk)
-- [ ] Multi-region Redis replication
-
----
-
 ## 📄 License
 
 This project is licensed under the [MIT License](LICENSE).
@@ -342,6 +323,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 Designed and developed with engineering discipline by **[Satyam Sinha](https://github.com/SATYAM-2013)**
 
-If you found this useful, give it a ⭐ — it helps!
+
 
 </div>
