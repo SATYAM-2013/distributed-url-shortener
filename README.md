@@ -323,6 +323,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
-If you found this useful, give it a ⭐ — it helps!
+
 
 </div>
