@@ -2,6 +2,8 @@
 
 # ⚡ Distributed URL Shortener
 
+**Designed & Developed by [Satyam Sinha](https://github.com/SATYAM-2013)**
+
 **A production-grade, horizontally scalable URL shortening service built in Go.**
 
 [Overview](#-overview) · [Architecture](#-architecture) · [Features](#-features) · [Quick Start](#-quick-start) · [API Reference](#-api-reference) · [Configuration](#-configuration) · [Deployment](#-cloud-deployment)
@@ -321,8 +323,6 @@ This project is licensed under the [MIT License](LICENSE).
 
 <div align="center">
 
-Designed and developed with engineering discipline by **[Satyam Sinha](https://github.com/SATYAM-2013)**
-
-
+If you found this useful, give it a ⭐ — it helps!
 
 </div>
